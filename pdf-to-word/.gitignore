@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.*
+.openai/local/
+*.zip
+public/cmaps/
+public/standard_fonts/
+test-results/
+playwright-report/
