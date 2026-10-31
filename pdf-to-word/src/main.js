@@ -22,7 +22,7 @@ const copy = {
  }
 };
 let lang = localStorage.getItem('waraqa-language') === 'en' ? 'en' : 'ar';
-let mode = 'word', pdf = null, file = null, busy = false, result = null, error = '', progress = 0, stage = '', specific = false, range = '', generation = 0;
+let mode = 'word', pdf = null, pdfTask = null, file = null, busy = false, result = null, error = '', progress = 0, stage = '', specific = false, range = '', generation = 0;
 const $ = selector => document.querySelector(selector);
 const t = () => copy[lang];
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -56,12 +56,12 @@ function render() {
  if($('#download')) $('#download').onclick=()=>download(result.blob,file.name.replace(/\.pdf$/i,'')+(mode==='word'?'.docx':'.txt'));
  if($('#copy')) $('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(result.text);$('#copy').textContent=t().copied;}catch{error=t().copyError;render();}};
 }
-async function reset() {generation++;const old=pdf;pdf=null;file=null;result=null;error='';specific=false;range='';busy=false;render();if(old)await old.destroy();}
+async function reset() {generation++;const oldTask=pdfTask;pdfTask=null;pdf=null;file=null;result=null;error='';specific=false;range='';busy=false;render();if(oldTask)await oldTask.destroy();}
 async function load(candidate) {
  if(!candidate||busy)return;
  if(!/\.pdf$/i.test(candidate.name)||candidate.size>25*1048576||candidate.size===0){error=t().badFile;render();return;}
- const current=++generation;const old=pdf;pdf=null;file=candidate;result=null;error='';busy=true;stage='loading';progress=0;specific=false;range='';render();
- try {if(old)await old.destroy();const data=new Uint8Array(await candidate.arrayBuffer());const task=getDocument({data,isEvalSupported:false,cMapUrl:'/cmaps/',cMapPacked:true,standardFontDataUrl:'/standard_fonts/'});task.onPassword=()=>task.destroy();const loaded=await task.promise;if(current!==generation){await loaded.destroy();return;}pdf=loaded;}
+ const current=++generation;const oldTask=pdfTask;pdfTask=null;pdf=null;file=candidate;result=null;error='';busy=true;stage='loading';progress=0;specific=false;range='';render();
+ try {if(oldTask)await oldTask.destroy();const data=new Uint8Array(await candidate.arrayBuffer());const task=getDocument({data,isEvalSupported:false,cMapUrl:'/cmaps/',cMapPacked:true,standardFontDataUrl:'/standard_fonts/'});pdfTask=task;task.onPassword=()=>task.destroy();const loaded=await task.promise;if(current!==generation){await task.destroy();return;}pdf=loaded;}
  catch {if(current===generation){file=null;error=t().invalid;}}
  finally {if(current===generation){busy=false;render();}}
 }

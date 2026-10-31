@@ -31,6 +31,7 @@ test('Arabic upload, real DOCX download, English text extraction and page valida
 });
 
 test('mobile layout, file validation, reset, and language persistence',async({page})=>{
+ const errors=[]; page.on('pageerror',e=>errors.push(e.message));
  await page.setViewportSize({width:390,height:844});await page.goto('/');
  await expect(page.locator('#choose')).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
@@ -42,4 +43,5 @@ test('mobile layout, file validation, reset, and language persistence',async({pa
  await expect(page.locator('#choose')).toBeVisible();
  await page.locator('#language').click();await page.reload();
  await expect(page.locator('html')).toHaveAttribute('lang','en');
+ expect(errors).toEqual([]);
 });
