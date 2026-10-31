@@ -2,7 +2,7 @@ node_modules/
 dist/
 .env
 .env.*
-.openai/local/
+.wrangler/
 *.zip
 public/cmaps/
 public/standard_fonts/

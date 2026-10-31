@@ -3,7 +3,5 @@ dist/
 .env
 .env.*
 !.env.example
-.openai/local/
 *.zip
-.sites-publish/
-site-deploy.tar.gz
+.wrangler/

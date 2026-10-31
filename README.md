@@ -4,7 +4,7 @@ A bilingual Arabic/English web app that converts text-based PDFs into editable D
 
 ## Run locally
 
-Requires Node.js 20.19+ or 22.12+.
+Use Node.js 24 (configured in `pdf-to-word/.node-version`).
 
 ```sh
 cd pdf-to-word
@@ -29,12 +29,24 @@ This is text reconstruction, not exact PDF layout conversion. Images, original t
 
 File bytes and extracted text stay in browser memory. Removing a file or closing the tab releases the document; no file history is stored. The language preference is saved in localStorage. Google Fonts requests font assets but receives no document contents. No analytics, accounts, or backend storage are used.
 
-## Hosting and GitHub
+## Deploy to Cloudflare Pages
 
-The static build can be hosted on any HTTPS static host. The optional `.openai/hosting.json` inside the app configures Sites hosting; it is separate from the GitHub repository.
+Connect the GitHub repository to Cloudflare Pages and use these build settings:
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `main` |
+| Framework preset | `None` |
+| Root directory | `pdf-to-word` |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+
+The `.node-version` file selects Node.js 24. No environment secrets, database, or backend service are needed. Cloudflare installs npm dependencies before running the build. The build script also copies the PDF.js CMaps and standard fonts required by PDF processing.
+
+For a manual upload, run `npm run build` inside `pdf-to-word`, then upload the **contents of `pdf-to-word/dist`** with Cloudflare Pages Direct Upload. Do not upload the source directory or `node_modules`.
+
+See Cloudflare's [build configuration](https://developers.cloudflare.com/pages/configuration/build-configuration/) and [Node.js build environment](https://developers.cloudflare.com/pages/configuration/build-image/) documentation.
 
 Source: [2201805467/PDF-to-Word](https://github.com/2201805467/PDF-to-Word) (public).
-
-Owner-private test deployment: [Waraqa](https://waraqa-pdf-taha.nearbybike2.chatgpt.site).
 
 Built with [PDF.js](https://mozilla.github.io/pdf.js/) and [docx](https://docx.js.org/).
