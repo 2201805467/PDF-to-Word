@@ -4,10 +4,9 @@ A bilingual Arabic/English web app that converts text-based PDFs into editable D
 
 ## Run locally
 
-Use Node.js 24 (configured in `pdf-to-word/.node-version`).
+Use Node.js 24 (configured in `.node-version`).
 
 ```sh
-cd pdf-to-word
 npm ci
 npm run dev
 ```
@@ -29,6 +28,20 @@ This is text reconstruction, not exact PDF layout conversion. Images, original t
 
 File bytes and extracted text stay in browser memory. Removing a file or closing the tab releases the document; no file history is stored. The language preference is saved in localStorage. Google Fonts requests font assets but receives no document contents. No analytics, accounts, or backend storage are used.
 
+## Deploy to Cloudflare Workers
+
+The app lives at the repository root. For a Git-connected Worker, use:
+
+| Setting | Value |
+| --- | --- |
+| Root directory | Leave empty (repository root) |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+
+The included `wrangler.jsonc` serves the static `dist` directory without a server script. The Worker name in Cloudflare must match `pdf-to-word` in this configuration; if you chose a different Worker name, update the configuration to match it.
+
+See Cloudflare's [Workers build configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/) and [static assets configuration](https://developers.cloudflare.com/workers/static-assets/binding/).
+
 ## Deploy to Cloudflare Pages
 
 Connect the GitHub repository to Cloudflare Pages and use these build settings:
@@ -37,13 +50,13 @@ Connect the GitHub repository to Cloudflare Pages and use these build settings:
 | --- | --- |
 | Production branch | `main` |
 | Framework preset | `None` |
-| Root directory | `pdf-to-word` |
+| Root directory | Leave empty (repository root) |
 | Build command | `npm run build` |
 | Build output directory | `dist` |
 
 The `.node-version` file selects Node.js 24. No environment secrets, database, or backend service are needed. Cloudflare installs npm dependencies before running the build. The build script also copies the PDF.js CMaps and standard fonts required by PDF processing.
 
-For a manual upload, run `npm run build` inside `pdf-to-word`, then upload the **contents of `pdf-to-word/dist`** with Cloudflare Pages Direct Upload. Do not upload the source directory or `node_modules`.
+For a manual upload, run `npm run build` from the repository root, then upload the **contents of `dist`** with Cloudflare Pages Direct Upload. Do not upload the source directory or `node_modules`.
 
 See Cloudflare's [build configuration](https://developers.cloudflare.com/pages/configuration/build-configuration/) and [Node.js build environment](https://developers.cloudflare.com/pages/configuration/build-image/) documentation.
 

@@ -5,3 +5,7 @@ dist/
 !.env.example
 *.zip
 .wrangler/
+public/cmaps/
+public/standard_fonts/
+test-results/
+playwright-report/
