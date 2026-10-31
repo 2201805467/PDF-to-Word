@@ -31,6 +31,10 @@ File bytes and extracted text stay in browser memory. Removing a file or closing
 
 ## Hosting and GitHub
 
-The static build can be hosted on any HTTPS static host. The optional `.openai/hosting.json` inside the app configures Sites hosting; it is separate from the GitHub repository. The workspace's existing GitHub remote is preserved. This project has not been published to GitHub automatically.
+The static build can be hosted on any HTTPS static host. The optional `.openai/hosting.json` inside the app configures Sites hosting; it is separate from the GitHub repository.
+
+Source: [2201805467/PDF-to-Word](https://github.com/2201805467/PDF-to-Word) (public).
+
+Owner-private test deployment: [Waraqa](https://waraqa-pdf-taha.nearbybike2.chatgpt.site).
 
 Built with [PDF.js](https://mozilla.github.io/pdf.js/) and [docx](https://docx.js.org/).
